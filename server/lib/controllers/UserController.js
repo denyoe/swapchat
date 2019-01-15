@@ -38,10 +38,22 @@ exports.get = function (req, res, next) {
     });
 };
 exports.update = function (req, res, next) {
-    //
+    var id = req.params.id;
+    new User_1.default({ id: id })
+        .save({
+        'username': req.body.username,
+        'password': req.body.password
+    })
+        .then(function (model) {
+        return res.json({
+            status: 'User Updated Successfully',
+            data: model
+        });
+    });
 };
 exports.remove = function (req, res, next) {
-    new User_1.default({ id: req.params.id })
+    var id = req.params.id;
+    new User_1.default({ id: id })
         .destroy()
         .then(function (model) {
         res.json({

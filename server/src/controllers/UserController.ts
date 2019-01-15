@@ -1,5 +1,4 @@
 import User from '../models/User'
-import Post from '../models/Post';
 
 export const all = (req: any, res: any, next: any) => {
     User.fetchAll().then((users: Object) => {
@@ -39,11 +38,25 @@ export const get = (req: any, res: any, next: any) => {
 }
 
 export const update = (req: any, res: any, next: any) => {
-    //
+    let id: number = req.params.id
+
+    new User({ id: id })
+        .save({
+            'username': req.body.username,
+            'password': req.body.password
+        })
+        .then((model: Object) => {
+            return res.json({
+                status: 'User Updated Successfully',
+                data: model
+            })
+        })
 }
 
 export const remove = (req: any, res: any, next: any) => {
-    new User({ id: req.params.id })
+    let id: number = req.params.id
+
+    new User({ id: id })
         .destroy()
         .then((model: Object) => {
             res.json({
