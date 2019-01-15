@@ -1,19 +1,22 @@
 import express from 'express'
-// const path = require('path')
-const cookieParser = require('cookie-parser')
-const logger = require('morgan')
-
-const indexRouter = require('./routes/index')
-const usersRouter = require('./routes/users')
+// const cookieParser = require('cookie-parser')
+import cors from 'cors'
+import logger from 'morgan'
+import bodyParser from 'body-parser';
+import indexRouter from './routes/index'
+import userRouter from './routes/user'
 
 const app = express()
 
 app.use(logger('dev'))
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: false }))
+// app.use(express.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(cors())
+// app.use(cookieParser())
 
-app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/api/', indexRouter)
+app.use('/api/user', userRouter)
 
 app.listen(4000, () => console.log('Chat Server running. Port: 4000. Enjoy!'))
