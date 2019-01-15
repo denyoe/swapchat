@@ -5,10 +5,10 @@ exports.up = function(knex, Promise) {
         table.text('body')
 
         table.integer('user_id').unsigned()
-        table.foreign('user_id').references('Users.id').onDelete('CASCADE').onUpdate('CASCADE')
+        table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE').onUpdate('CASCADE')
 
         table.integer('channel_id').unsigned()
-        table.foreign('channel_id').references('Channels.id').onDelete('CASCADE').onUpdate('CASCADE')
+        table.foreign('channel_id').references('id').inTable('users').onDelete('CASCADE').onUpdate('CASCADE')
 
         table.timestamps(true, true)
     })

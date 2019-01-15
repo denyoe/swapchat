@@ -1,16 +1,19 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var bookshelf = require('../../bookshelf');
-var Post_1 = __importDefault(require("./Post"));
-exports.default = bookshelf.Model.extend({
+// const User = bookshelf.Model.extend({
+//     tableName: 'users',
+//     posts: function (): Object {
+//         return this.hasMany(Post)
+//     }
+// })
+module.exports = bookshelf.model('User', {
     tableName: 'users',
     posts: function () {
-        return this.hasMany(Post_1.default);
+        return this.hasMany('Post');
     }
 });
+// module.exports = bookshelf.model('User', User)
 // export default class User extends bookshelf.Model {
 //     get tableName() {
 //         return 'users'

@@ -14,23 +14,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseController_1 = require("./BaseController");
-var UserController = /** @class */ (function (_super) {
-    __extends(UserController, _super);
-    function UserController() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.posts = function (req, res) {
-            var id = req.params.id;
-            new _this.Model({ id: id })
-                .fetch({ withRelated: ['posts'] })
-                .then(function (model) {
-                return res.json(model);
-            })
-                .catch(function (err) {
-                return res.json(new Error(err));
-            });
-        };
-        return _this;
+var MessageController = /** @class */ (function (_super) {
+    __extends(MessageController, _super);
+    function MessageController() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    return UserController;
+    return MessageController;
 }(BaseController_1.BaseController));
-exports.UserController = UserController;
+exports.MessageController = MessageController;

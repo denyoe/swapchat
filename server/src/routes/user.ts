@@ -1,26 +1,25 @@
 /* users. */
+require('../models/User')
 import express from 'express'
-import {
-    all,
-    create,
-    get,
-    update,
-    remove,
-    posts
-} from '../controllers/UserController'
+import { Model } from 'bookshelf'
+import { UserController } from '../controllers/UserController'
+
+let UserCtrl: UserController = new UserController('User')
 
 const router = express.Router()
 
-router.get('/', all)
+router.get('/', UserCtrl.all)
 
-router.post('/', create)
+router.post('/', UserCtrl.create)
 
-router.get('/:id', get)
+router.get('/:id', UserCtrl.get)
 
-router.put('/:id', update)
+router.put('/:id', UserCtrl.update)
 
-router.delete('/:id', remove)
+router.patch('/:id', UserCtrl.update)
 
-router.get('/:id/posts', posts)
+router.delete('/:id', UserCtrl.remove)
+
+router.get('/:id/posts', UserCtrl.posts)
 
 export default router

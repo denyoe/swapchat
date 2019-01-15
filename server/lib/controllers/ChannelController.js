@@ -14,9 +14,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseController_1 = require("./BaseController");
-var UserController = /** @class */ (function (_super) {
-    __extends(UserController, _super);
-    function UserController() {
+var ChannelController = /** @class */ (function (_super) {
+    __extends(ChannelController, _super);
+    function ChannelController() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.posts = function (req, res) {
             var id = req.params.id;
@@ -29,8 +29,19 @@ var UserController = /** @class */ (function (_super) {
                 return res.json(new Error(err));
             });
         };
+        _this.post = function (req, res) {
+            var id = req.params.id;
+            new _this.Model({ id: id })
+                .posts()
+                .save({
+                user_id: 1
+            })
+                .then(function (model) {
+                return res.json(model);
+            });
+        };
         return _this;
     }
-    return UserController;
+    return ChannelController;
 }(BaseController_1.BaseController));
-exports.UserController = UserController;
+exports.ChannelController = ChannelController;

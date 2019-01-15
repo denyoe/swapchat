@@ -2,6 +2,10 @@ const knex = require('knex')
 const bookshelf = require('bookshelf')
 const config = require('./knexfile')
 
-module.exports = bookshelf(
-    knex(config.development)
+const Bookshelf = bookshelf(
+    knex(config.staging)
 )
+
+Bookshelf.plugin('registry')
+
+module.exports = Bookshelf

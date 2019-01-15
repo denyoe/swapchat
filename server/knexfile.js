@@ -13,7 +13,7 @@ module.exports = {
   staging: {
     client: 'mysql',
     connection: {
-      database: 'swap-chat',
+      database: 'swapchat',
       user:     'root',
       password: '',
       charset: 'utf8'

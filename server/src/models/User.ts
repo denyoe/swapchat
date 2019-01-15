@@ -1,12 +1,21 @@
 const bookshelf = require('../../bookshelf')
-import Post from './Post'
+import * as Post from './Post'
 
-export default bookshelf.Model.extend({
+// const User = bookshelf.Model.extend({
+//     tableName: 'users',
+//     posts: function (): Object {
+//         return this.hasMany(Post)
+//     }
+// })
+
+module.exports = bookshelf.model('User', {
     tableName: 'users',
     posts: function (): Object {
-        return this.hasMany(Post)
+        return this.hasMany('Post')
     }
 })
+
+// module.exports = bookshelf.model('User', User)
 
 // export default class User extends bookshelf.Model {
 //     get tableName() {

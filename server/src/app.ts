@@ -1,22 +1,32 @@
 import express from 'express'
-// const cookieParser = require('cookie-parser')
 import cors from 'cors'
 import logger from 'morgan'
 import bodyParser from 'body-parser';
 import indexRouter from './routes/index'
 import userRouter from './routes/user'
+import channelRouter from './routes/channel'
 
-const app = express()
+class App {
 
-app.use(logger('dev'))
-app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(express.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(cors())
-// app.use(cookieParser())
+    public app: express.Application
 
-app.use('/api/', indexRouter)
-app.use('/api/user', userRouter)
+    constructor() {
+        this.app = express()
+        this.config()
+    }
 
-app.listen(4000, () => console.log('Chat Server running. Port: 4000. Enjoy!'))
+    private config(): void {
+        this.app.use(logger('dev'))
+        this.app.use(cors())
+        this.app.use(bodyParser.json())
+        this.app.use(bodyParser.urlencoded({ extended: false }))
+        // app.use(cookieParser())
+
+        this.app.use('/api/', indexRouter)
+        this.app.use('/api/user', userRouter)
+        this.app.use('/api/channel', channelRouter)
+    }
+
+}
+
+export default new App().app
