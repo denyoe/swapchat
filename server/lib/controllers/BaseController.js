@@ -15,7 +15,7 @@ var BaseController = /** @class */ (function () {
             new _this.Model(req.body)
                 .save()
                 .then(function (model) {
-                return res.json(model);
+                return res.status(201).json(model);
             });
         };
         this.get = function (req, res) {
@@ -25,6 +25,17 @@ var BaseController = /** @class */ (function () {
                 return res.json(model);
             }).catch(function (err) {
                 return res.json(new Error(err));
+            });
+        };
+        this.byId = function (id) {
+            _this.Model.where('id', id)
+                .fetch()
+                .then(function (model) {
+                // console.log(_.toArray(model.toJSON()))
+                // return _.toArray(model.toJSON())
+                return model.toJSON();
+            }).catch(function (err) {
+                return new Error(err);
             });
         };
         this.update = function (req, res) {

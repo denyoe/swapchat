@@ -1,7 +1,27 @@
 import { Request, Response } from 'express'
-import { BaseController } from './BaseController';
+import { BaseController } from './BaseController'
+import * as bcrypt from 'bcryptjs'
 
 export class UserController extends BaseController {
+
+    // public create()
+    // bcrypt.hash(this.password, 10, (err, hash) => {
+    //     this.password = hash;
+    //     next();
+    // });
+
+    public create = async (req: Request, res: Response) => {
+        let hash = await bcrypt.hash(req.body.password, 10)
+
+        new this.Model({
+            username: req.body.username,
+            password: hash
+        })
+            .save()
+            .then((model: Object) => {
+                return res.status(201).json(model)
+            })
+    }
 
     public posts = (req: Request, res: Response) => {
         let id: number = req.params.id
@@ -13,6 +33,17 @@ export class UserController extends BaseController {
             })
             .catch((err: string) => {
                 return res.json(new Error(err))
+            })
+    }
+
+    public byUsername = (username: string) => {
+        new this.Model({ username: username })
+            .then((model: any) => {
+                console.log('hey', model)
+                return model.toJSON()
+            })
+            .catch((err: string) => {
+                return new Error(err)
             })
     }
 

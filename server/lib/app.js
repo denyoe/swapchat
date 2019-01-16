@@ -10,8 +10,31 @@ var body_parser_1 = __importDefault(require("body-parser"));
 var index_1 = __importDefault(require("./routes/index"));
 var user_1 = __importDefault(require("./routes/user"));
 var channel_1 = __importDefault(require("./routes/channel"));
+var UserController_1 = require("./controllers/UserController");
+var graphqlHTTP = require('express-graphql');
+var dotenv = require('dotenv').config();
+var Auth = require('./controllers/AuthController').default;
+var expressValidator = require('express-validator');
+// const auth = require("../controllers/auth").default
+// const expressValidator = require("express-validator")
+// const { buildSchema } = require('graphql')
+var typeDefs = require('./schema');
+// require('./passport-config')(passport)
+// console.log(dotenv)
+// console.log(process.env.JWT_SECRET)
 var App = /** @class */ (function () {
     function App() {
+        // GraphQL schema
+        this.schema = typeDefs;
+        var UserCtrl = new UserController_1.UserController('User');
+        // Root resolver
+        this.root = {
+            message: function () { return 'Hello World!'; },
+            user: function (args) { return UserCtrl.byId(args.id); },
+            channel: function () { return 'Hello World!'; },
+            post: function () { return 'Hello World!'; },
+            posts: function () { return 'Hello World!'; },
+        };
         this.app = express_1.default();
         this.config();
     }
@@ -20,10 +43,19 @@ var App = /** @class */ (function () {
         this.app.use(cors_1.default());
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false }));
-        // app.use(cookieParser())
+        // this.app.use(cookieParser())
+        this.app.use(expressValidator());
+        this.app.use(Auth.initialize());
+        this.app.use('/grahql', graphqlHTTP({
+            schema: this.schema,
+            rootValue: this.root,
+            graphiql: true
+        }));
         this.app.use('/api/', index_1.default);
-        this.app.use('/api/user', user_1.default);
-        this.app.use('/api/channel', channel_1.default);
+        this.app.use(process.env.API_BASE + 'login', Auth.login);
+        this.app.use(process.env.API_BASE + 'user', user_1.default);
+        this.app.use(process.env.API_BASE + 'channel', channel_1.default);
+        // this.app.use('/api/channel', channelRouter)
     };
     return App;
 }());

@@ -67,3 +67,21 @@ The application should now be accessible at `http://localhost:8080/`
 *   Use modern JavaScript
 *   Using a strict syntactical superset of JavaScript like TypeScript or Flow is appreciated
 *   Using GraphQL is very appreciated, see: https://graphql.org/graphql-js/, https://www.apollographql.com/docs/react/essentials/get-started.html
+
+---
+
+#### Example Graph Queries
+
+```
+<!-- Query String -->
+query getSingleUser($id: Int!) {
+    user(id: $id) {
+        username,
+    		password
+    }
+}
+<!-- Query Variables -->
+{ 
+    "id":231
+}
+```

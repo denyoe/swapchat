@@ -3,6 +3,7 @@ import { ICRUD } from './ICRUD'
 import { threadId } from 'worker_threads'
 import { Model } from 'bookshelf'
 const Bookshelf = require('../../bookshelf')
+import _ from 'lodash'
 
 export class BaseController implements ICRUD {
 
@@ -24,7 +25,7 @@ export class BaseController implements ICRUD {
         new this.Model(req.body)
             .save()
             .then((model: Object) => {
-                return res.json(model)
+                return res.status(201).json(model)
             })
     }
 
@@ -35,6 +36,18 @@ export class BaseController implements ICRUD {
                 return res.json(model)
             }).catch((err: string) => {
                 return res.json(new Error(err))
+            })
+    }
+
+    public byId = (id: number) => {
+        this.Model.where('id', id)
+            .fetch()
+            .then((model: any) => {
+                // console.log(_.toArray(model.toJSON()))
+                // return _.toArray(model.toJSON())
+                return model.toJSON()
+            }).catch((err: string) => {
+                return new Error(err)
             })
     }
 
