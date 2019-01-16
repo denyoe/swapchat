@@ -57,17 +57,17 @@ var Auth = /** @class */ (function () {
         var _this = this;
         this.initialize = function () {
             passport_1.default.use('jwt', _this.getStrategy());
-            // passport.use(this.getStrategy())
             return passport_1.default.initialize();
         };
         this.authenticate = function (callback) { return passport_1.default.authenticate("jwt", { session: false, failWithError: true }, callback); };
         this.genToken = function (user) {
             var expires = moment_1.default().utc().add({ days: 7 }).unix();
+            var secret = process.env.JWT_SECRET;
             var token = jwt.encode({
                 exp: expires,
                 username: user.username
-            }, 'ogA9ppB$S!dy!hu3Rauvg!L96');
-            // }, process.env.JWT_SECRET)
+                // }, 'ogA9ppB$S!dy!hu3Rauvg!L96')
+            }, secret);
             return {
                 token: "JWT " + token,
                 expires: moment_1.default.unix(expires).format(),
@@ -86,14 +86,9 @@ var Auth = /** @class */ (function () {
                         errors = req.validationErrors();
                         if (errors)
                             throw errors;
-                        return [4 /*yield*/, new (Bookshelf.model('User'))({ username: req.body.username }).fetch()
-                            // console.log('attempting...', user)
-                            // let success: any = await this.attempt(req.body.username, req.body.password)
-                        ];
+                        return [4 /*yield*/, new (Bookshelf.model('User'))({ username: req.body.username }).fetch()];
                     case 1:
                         user_1 = _a.sent();
-                        // console.log('attempting...', user)
-                        // let success: any = await this.attempt(req.body.username, req.body.password)
                         new (Bookshelf.model('User'))({ username: req.body.username })
                             .fetch()
                             .then(function (model) {
@@ -102,21 +97,10 @@ var Auth = /** @class */ (function () {
                             }
                             bcrypt.compare(req.body.password, model.toJSON().password).then(function (success) {
                                 if (!success) {
-                                    // throw new Error("Invalid Password")
                                     res.status(401).json({ "message": "Invalid credentials", "errors": new Error("Invalid Password") });
                                 }
                                 return res.status(200).json(_this.genToken(user_1.toJSON()));
                             });
-                            // bcrypt.compare(req.body.password, model.toJSON().password, (err, success) => {
-                            //     console.log(err, success)
-                            //     if (err) {
-                            //         throw new Error("Bcrypt Error")
-                            //     }
-                            //     if(! success) {
-                            //         throw new Error("Invalid Password")
-                            //     }
-                            //     return res.status(200).json(this.genToken(user.toJson()))
-                            // })
                         });
                         return [3 /*break*/, 3];
                     case 2:
@@ -127,20 +111,6 @@ var Auth = /** @class */ (function () {
                 }
             });
         }); };
-        // private attempt = async (username: string, password: string) => {
-        //     new (Bookshelf.model('User'))({ username: username })
-        //         .fetch()
-        //         .then((model: any) => {
-        //             return new Promise((resolve: any, reject: any) => {
-        //                 if(!  model)    return reject(new Error("User not found"))
-        //                 bcrypt.compare(password, model.toJSON().password, (err, success) => {
-        //                     console.log(err, success)
-        //                     if (err) return reject(err)
-        //                     return resolve(success)
-        //                 })
-        //             })
-        //         })
-        // }
         this.getStrategy = function () {
             var params = {
                 secretOrKey: process.env.JWT_SECRET,
@@ -149,8 +119,6 @@ var Auth = /** @class */ (function () {
                 passReqToCallback: true
             };
             return new passport_jwt_1.Strategy(params, function (req, payload, done) {
-                // let user: any = new UserController('User').byUsername(payload.username)
-                // let user: any = await new (Bookshelf.model('User'))({ username: payload.username }).fetch()
                 new (Bookshelf.model('User'))({ username: payload.username })
                     .fetch()
                     .then(function (model) {
@@ -159,10 +127,6 @@ var Auth = /** @class */ (function () {
                     }
                     return done(null, model.toJSON());
                 });
-                // if(! user) {
-                //     return done(null, false, { message: 'User not found' })
-                // }
-                // return done(null, user)
             });
         };
     }

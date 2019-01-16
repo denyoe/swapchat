@@ -8,11 +8,14 @@ let UserCtrl: UserController = new UserController('User')
 
 const router = express.Router()
 
+const verifyToken = require('../middlewares/verifytoken')
+router.use(verifyToken)
+
 router.get('/', UserCtrl.all)
 
 router.post('/', UserCtrl.create)
 
-router.get('/:id', UserCtrl.get)
+router.get('/:id', UserCtrl.get)   
 
 router.put('/:id', UserCtrl.update)
 

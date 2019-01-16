@@ -9,6 +9,8 @@ var express_1 = __importDefault(require("express"));
 var UserController_1 = require("../controllers/UserController");
 var UserCtrl = new UserController_1.UserController('User');
 var router = express_1.default.Router();
+var verifyToken = require('../middlewares/verifytoken');
+router.use(verifyToken);
 router.get('/', UserCtrl.all);
 router.post('/', UserCtrl.create);
 router.get('/:id', UserCtrl.get);

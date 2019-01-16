@@ -7,6 +7,9 @@ let ChannelCtrl: ChannelController = new ChannelController('Channel')
 
 const router = express.Router()
 
+const verifyToken = require('../middlewares/verifytoken')
+router.use(verifyToken)
+
 router.get('/', ChannelCtrl.all)
 
 router.post('/', ChannelCtrl.create)

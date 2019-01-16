@@ -7,22 +7,14 @@ import userRouter from './routes/user'
 import channelRouter from './routes/channel'
 import { UserController } from './controllers/UserController'
 
+
 const graphqlHTTP = require('express-graphql')
-// const passport = require('passport')
 import passport from 'passport'
 const dotenv = require('dotenv').config()
 const Auth = require('./controllers/AuthController').default
 const expressValidator = require('express-validator')
-// const auth = require("../controllers/auth").default
-// const expressValidator = require("express-validator")
 
-// const { buildSchema } = require('graphql')
 const typeDefs = require('./schema')
-
-// require('./passport-config')(passport)
-
-// console.log(dotenv)
-// console.log(process.env.JWT_SECRET)
 
 class App {
 
@@ -75,7 +67,6 @@ class App {
         this.app.use(process.env.API_BASE + 'login', Auth.login)
         this.app.use(process.env.API_BASE + 'user', userRouter)
         this.app.use(process.env.API_BASE + 'channel', channelRouter)
-        // this.app.use('/api/channel', channelRouter)
     }
 
 }

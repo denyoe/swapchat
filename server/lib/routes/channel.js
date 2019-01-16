@@ -8,6 +8,8 @@ var express_1 = __importDefault(require("express"));
 var ChannelController_1 = require("../controllers/ChannelController");
 var ChannelCtrl = new ChannelController_1.ChannelController('Channel');
 var router = express_1.default.Router();
+var verifyToken = require('../middlewares/verifytoken');
+router.use(verifyToken);
 router.get('/', ChannelCtrl.all);
 router.post('/', ChannelCtrl.create);
 router.get('/:id', ChannelCtrl.get);

@@ -15,13 +15,7 @@ var graphqlHTTP = require('express-graphql');
 var dotenv = require('dotenv').config();
 var Auth = require('./controllers/AuthController').default;
 var expressValidator = require('express-validator');
-// const auth = require("../controllers/auth").default
-// const expressValidator = require("express-validator")
-// const { buildSchema } = require('graphql')
 var typeDefs = require('./schema');
-// require('./passport-config')(passport)
-// console.log(dotenv)
-// console.log(process.env.JWT_SECRET)
 var App = /** @class */ (function () {
     function App() {
         // GraphQL schema
@@ -55,7 +49,6 @@ var App = /** @class */ (function () {
         this.app.use(process.env.API_BASE + 'login', Auth.login);
         this.app.use(process.env.API_BASE + 'user', user_1.default);
         this.app.use(process.env.API_BASE + 'channel', channel_1.default);
-        // this.app.use('/api/channel', channelRouter)
     };
     return App;
 }());
