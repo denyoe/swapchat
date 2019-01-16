@@ -19,7 +19,7 @@ module.exports = (req: any, res: any, next: any) => {
         });
     } else {
         // forbidden without token
-        return res.status(403).json({
+        return res.status(401).json({
             "error": true
         })
     }

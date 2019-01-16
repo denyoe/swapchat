@@ -72,6 +72,9 @@ describe('User Resource', function () {
                 expect(res.statusCode).toBe(200);
                 expect(res.body.username).toBe('marcek');
                 expect(res.body.password).toBe('markword');
+                knex('users')
+                    .where('id', res.body.id)
+                    .del();
             });
         });
         it('can GET a user', function () { return __awaiter(_this, void 0, void 0, function () {
@@ -89,6 +92,9 @@ describe('User Resource', function () {
                                 expect(res.type).toBe('application/json');
                                 expect(res.statusCode).toBe(200);
                                 expect(res.body.username).toBe('koffi');
+                                knex('users')
+                                    .where('id', id)
+                                    .del();
                             })];
                 }
             });
@@ -110,6 +116,9 @@ describe('User Resource', function () {
                             expect(res.type).toBe('application/json');
                             expect(res.statusCode).toBe(200);
                             expect(res.body.username).toBe('sammy');
+                            knex('users')
+                                .where('id', user)
+                                .del();
                             done();
                         });
                         return [2 /*return*/];
