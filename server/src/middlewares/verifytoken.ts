@@ -16,7 +16,7 @@ module.exports = (req: any, res: any, next: any) => {
             }
             req.decoded = decoded;
             next() // no error, proceed
-        });
+        })
     } else {
         // forbidden without token
         return res.status(401).json({

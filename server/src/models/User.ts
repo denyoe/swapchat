@@ -8,7 +8,7 @@ import * as Post from './Post'
 //     }
 // })
 
-module.exports = bookshelf.model('User', {
+export const User = bookshelf.model('User', {
     tableName: 'users',
     posts: function (): Object {
         return this.hasMany('Post')

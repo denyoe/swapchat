@@ -1,6 +1,6 @@
 import * as jwt from 'jwt-simple'
 import moment from 'moment'
-import * as User from '../models/User'
+import { User } from '../models/User'
 import * as bcrypt from 'bcryptjs'
 import passport from 'passport'
 import { Request, Response } from 'express'
@@ -42,7 +42,7 @@ class Auth {
             let errors = req.validationErrors()
             if (errors) throw errors
 
-            let user: any = await new (Bookshelf.model('User'))({ username: req.body.username }).fetch()
+            let user: any = await new User({ username: req.body.username }).fetch()
 
             if(user) {
                 new (Bookshelf.model('User'))({ username: req.body.username })
@@ -77,7 +77,7 @@ class Auth {
         }
 
         return new Strategy(params, (req: Request, payload: any, done: any) => {
-            new (Bookshelf.model('User'))({username: payload.username})
+            new User({username: payload.username})
                 .fetch()
                 .then((model: any) => {
                     if (model.length == 0) {

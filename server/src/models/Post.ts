@@ -12,12 +12,12 @@ import * as Channel from './Channel'
 //     }
 // })
 
-module.exports = bookshelf.model('Post', {
+export const Post = bookshelf.model('Post', {
     tableName: 'messages',
-    author: function (): Object {
+    author: function (): any {
         return this.belongsTo('User')
     },
-    channel: function(): Object {
+    channel: function(): any {
         return this.belongsTo('Channel')
     }
 })

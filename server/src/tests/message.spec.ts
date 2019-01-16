@@ -11,7 +11,6 @@ describe('Message Resource', () => {
   let token: any
 
   beforeAll(async (done) => {
-    await knex('messages').truncate()
     
     knex('users')
       .where('id', 888)
@@ -38,7 +37,7 @@ describe('Message Resource', () => {
   })
 
   afterAll(async () => {
-    await knex('messages').truncate()
+    // await knex('messages').truncate()
     await knex('users').where('id', 888).del()
   })
 
@@ -114,22 +113,18 @@ describe('Message Resource', () => {
         { name: 'Post to' }
       ])
 
-      const user_id: number = await knex('users').insert([
-        { username: 'koffi', password: 'pass' }
-      ])
-
       return request(App)
-        .post('/api/channel/' + id + '/message')
+        .post('/api/channel/' + id)
         .set('Authorization', `Bearer ${token}`)
-        .send({ body: 'Posted to channel', user_id: user_id, channel_id: id })
-        .expect(200)
+        .send({ body: 'Posted to channel'})
         .then(async (res: any) => {
           expect(res.type).toBe('application/json')
-          expect(res.statusCode).toBe(200)
+          expect(res.statusCode).toBe(201)
           expect(res.body.body).toBe('Posted to channel')
+          expect(res.body.user_id).toBe(888) // logged in user
 
-          await knex('users').where('id', user_id).del()
-          await knex('channels').where('id', id).del()
+          await knex('messages').where('id', res.body.id).del()
+          // await knex('channels').where('id', id).del()
         })
 
     })

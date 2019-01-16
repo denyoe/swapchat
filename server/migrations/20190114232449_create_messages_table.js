@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
         table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE').onUpdate('CASCADE')
 
         table.integer('channel_id').unsigned()
-        table.foreign('channel_id').references('id').inTable('users').onDelete('CASCADE').onUpdate('CASCADE')
+        table.foreign('channel_id').references('id').inTable('channels').onDelete('CASCADE').onUpdate('CASCADE')
 
         table.timestamps(true, true)
     })

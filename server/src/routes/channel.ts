@@ -22,6 +22,6 @@ router.patch('/:id', ChannelCtrl.update)
 
 router.delete('/:id', ChannelCtrl.remove)
 
-router.post('/:id/message', ChannelCtrl.post)
+router.post('/:id', ChannelCtrl.post)
 
 export default router
