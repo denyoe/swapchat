@@ -5,6 +5,7 @@ const request = require('supertest')
 import App from '../app'
 
 const knex = k(config.staging)
+// const knex = k(config.testing)
 
 describe('Message Resource', () => {
   // admin : password
@@ -58,7 +59,7 @@ describe('Message Resource', () => {
 
     it('can GET a channel', async () => {
       const id: number = await knex('channels').insert([
-        { name: 'Channel 33' }
+        { name: 'Channel 33', user_id: 888 }
       ])
 
       return request(App).get('/api/channel/' + id)
@@ -74,7 +75,7 @@ describe('Message Resource', () => {
 
     it('can UPDATE a channel', async (done) => {
       const id: number = await knex('channels').insert([
-        { name: 'Channel 33' }
+        { name: 'Post to', user_id: 888 }
       ])
 
       request(App)
@@ -94,7 +95,7 @@ describe('Message Resource', () => {
 
     it('can DELETE a channel', async () => {
       const id: number = await knex('channels').insert([
-        { name: 'Channel 33' }
+        { name: 'Post to', user_id: 888 }
       ])
 
       return request(App)
@@ -110,7 +111,7 @@ describe('Message Resource', () => {
 
     it('can POST to a channel', async () => {
       const id: number = await knex('channels').insert([
-        { name: 'Post to' }
+        { name: 'Post to', user_id: 888 }
       ])
 
       return request(App)
@@ -124,7 +125,7 @@ describe('Message Resource', () => {
           expect(res.body.user_id).toBe(888) // logged in user
 
           await knex('messages').where('id', res.body.id).del()
-          // await knex('channels').where('id', id).del()
+          await knex('channels').where('id', id).del()
         })
 
     })

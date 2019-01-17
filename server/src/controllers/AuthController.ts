@@ -49,18 +49,18 @@ class Auth {
                     .fetch()
                     .then((model: any) => {
                         if (!model) {
-                            res.status(401).json({ "message": "Invalid credentials", "errors": new Error("Invalid Password") })
+                            res.status(401).json({ "message": "Invalid credentials", "errors": "Invalid Password" })
                         }
 
                         bcrypt.compare(req.body.password, model.toJSON().password).then((success) => {
                             if (!success) {
-                                res.status(401).json({ "message": "Invalid credentials", "errors": new Error("Invalid Password") })
+                                res.status(401).json({ "message": "Invalid credentials", "errors": "Invalid Password" })
                             }
                             return res.status(200).json(this.genToken(user.toJSON()))
                         })
                     })
             } else {
-                return res.status(401).json({ "message": "Invalid credentials", "errors": new Error("User not found") })
+                return res.status(401).json({ "message": "Invalid credentials", "errors": "User not found" })
             }
 
         } catch (err) {

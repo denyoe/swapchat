@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
         table.increments()
         table.text('name')
 
-        table.integer('user_id').unsigned()
+        table.integer('user_id').unsigned().notNull()
         table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE').onUpdate('CASCADE')
         
         table.timestamps(true, true)

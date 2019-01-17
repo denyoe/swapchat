@@ -5,9 +5,9 @@
 #### Server (NodeJS)
 1. Go to server directory: `cd server`
 2. Install dependencies with: `npm install`
-3. Update database details in `server/knexfile.js`
-4. Run Migrations `knex migrate:latest` (You might need to install the migrations CLI `npm install knex -g`)
-5. Run Seeders `knex seed:run`
+3. Update (MySQL) database details in `server/knexfile.js`
+4. Run Migrations `knex migrate:latest --env staging` (You might need to install the migrations CLI `npm install knex -g`)
+5. Run Seeders `knex seed:run` (Default Password: `password`)
 6. Start Server with `npm run start`
 
 Server API URL: `http://localhost:4000/`

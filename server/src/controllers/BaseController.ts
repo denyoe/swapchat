@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import { ICRUD } from './ICRUD'
 import { threadId } from 'worker_threads'
 import { Model } from 'bookshelf'
+import { parse } from '../services/jwt'
+import { User } from '../models/User'
 const Bookshelf = require('../../bookshelf')
 import _ from 'lodash'
 
@@ -14,37 +16,36 @@ export class BaseController implements ICRUD {
     }
 
     public all = (req: Request, res: Response) => {
-        this.Model.fetchAll().then((collection: Object) => {
+        this.Model.fetchAll().then((collection: any) => {
             return res.json(collection)
         }).catch((err: string) => {
-            return res.json(new Error(err))
+            return res.json(err)
         })
     }
 
-    public create = (req: Request, res: Response) => {
+    public create = async (req: Request, res: Response) => {
+        let username = parse(req).username
+
+        let user: any = await new User({ username: username }).fetch()
+        
         new this.Model(req.body)
+            .set({user_id: user.id})
             .save()
-            .then((model: Object) => {
-                return res.status(201).json(model)
-            })
+            .then((model: any) => res.status(201).json(model))
+            .catch((err: any) => res.status(500).json(err))
     }
 
     public get = (req: Request, res: Response) => {
         this.Model.where('id', req.params.id)
             .fetch()
-            .then((model: Object) => {
-                return res.json(model)
-            }).catch((err: string) => {
-                return res.json(new Error(err))
-            })
+            .then((model: any) => res.json(model))
+            .catch((err: any) => res.status(500).json(err))
     }
 
     public byId = (id: number) => {
         this.Model.where('id', id)
             .fetch()
             .then((model: any) => {
-                // console.log(_.toArray(model.toJSON()))
-                // return _.toArray(model.toJSON())
                 return model.toJSON()
             }).catch((err: string) => {
                 return new Error(err)
@@ -56,12 +57,8 @@ export class BaseController implements ICRUD {
 
         new this.Model({ id: id })
             .save(req.body)
-            .then((model: Object) => {
-                return res.json(model)
-            })
-            .catch((err: string) => {
-                return res.json(new Error(err))
-            })
+            .then((model: any) => res.json(model))
+            .catch((err: any) => res.status(500).json(err))
     }
 
     public remove = (req: Request, res: Response) => {
@@ -69,16 +66,14 @@ export class BaseController implements ICRUD {
 
         this.Model.forge({ id: id })
             .destroy()
-            .then((model: Object) => {
+            .then((model: any) => {
                 return res.json({
                             status: 'success',
                             msg: 'Record Successfully Delated',
                             data: model
                         })
             })
-            .catch((err: string) => {
-                return res.json(new Error(err))
-            })
+            .catch((err: any) => res.status(500).json(err))
     }
 
 }

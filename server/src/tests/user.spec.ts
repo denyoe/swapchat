@@ -5,6 +5,7 @@ const request = require('supertest')
 import App from '../app'
 
 const knex = k(config.staging)
+// const knex = k(config.testing)
 
 describe('User Resource', () => {
   // admin : password
@@ -43,36 +44,34 @@ describe('User Resource', () => {
 
   describe('CRUD', () => {
 
-    it('It should require authorization', () => {
+    it('It should require authorization', (done) => {
       return request(App)
               .get('/api/user/999')
               .then((res: any) => {
                 expect(res.statusCode).toBe(401)
+                done()
               })
     })
 
-    it('return 404', () => {
+    it('return 404', (done) => {
       return request(App).get('/undefined')
-              .expect(404)
               .then((res: any) => {
                 expect(res.statusCode).toBe(404)
+                done()
               })
     })
 
-    it('can CREATE new user', () => {
-      return request(App).post('/api/user')
-        .set('Authorization', `Bearer ${token}`)
-        .send({ 'username': 'marcek', 'password': 'markword' })
-        .then(async (res: any) => {
-          expect(res.type).toBe('application/json')
-          expect(res.statusCode).toBe(201)
-          expect(res.body.username).toBe('marcek')
+    it('can CREATE new user', () => request(App).post('/api/user')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ 'username': 'marcek', 'password': 'markword' })
+      .then(async (res: any) => {
+        expect(res.type).toBe('application/json');
+        expect(res.statusCode).toBe(201);
+        expect(res.body.username).toBe('marcek');
+        await knex('users').where('id', res.body.id).del();
+      }))
 
-          await knex('users').where('id', res.body.id).del()
-        })
-    })
-
-    it('can GET a user', async () => {
+    it('can GET a user', async (done) => {
       const id: number = await knex('users').insert([
         { username: 'koffi', password: 'pass' }
       ])
@@ -86,6 +85,7 @@ describe('User Resource', () => {
           expect(res.body.username).toBe('koffi')
 
           await knex('users').where('id', id).del()
+          done()
         })
     })
 

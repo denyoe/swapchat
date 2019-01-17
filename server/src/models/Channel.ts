@@ -1,17 +1,15 @@
 const bookshelf = require('../../bookshelf')
 import * as Post from './Post'
-// import * as Bookshelf from 'bookshelf'
 
-// export default bookshelf.Model.extend({
-//     tableName: 'channels',
-//     posts: function (): any {
-//         return this.hasMany(Post)
-//     }
-// })
-
-module.exports = bookshelf.model('Channel', {
+export const Channel = bookshelf.model('Channel', {
     tableName: 'channels',
     posts: function (): any {
         return this.hasMany('Post')
+    },
+    members: function(): any {
+        return this.belongsToMany('User', 'user_channels')
+    },
+    owner: function(): any {
+        return this.belongsTo('User')
     }
 })

@@ -24,4 +24,10 @@ router.delete('/:id', ChannelCtrl.remove)
 
 router.post('/:id', ChannelCtrl.post)
 
+router.get('/:id/members', ChannelCtrl.members)
+
+router.get('/:id/posts', ChannelCtrl.posts)
+
+router.post('/:id/subscribe/:user_id', ChannelCtrl.subscribe)
+
 export default router

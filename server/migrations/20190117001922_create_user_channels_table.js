@@ -1,13 +1,12 @@
 
 exports.up = function(knex, Promise) {
-    return knex.schema.createTable('messages', table => {
+    return knex.schema.createTable('user_channels', table => {
         table.increments()
-        table.text('body')
 
-        table.integer('user_id').unsigned()
+        table.integer('user_id').unsigned().notNull()
         table.foreign('user_id').references('id').inTable('users').onDelete('CASCADE').onUpdate('CASCADE')
 
-        table.integer('channel_id').unsigned()
+        table.integer('channel_id').unsigned().notNull()
         table.foreign('channel_id').references('id').inTable('channels').onDelete('CASCADE').onUpdate('CASCADE')
 
         table.timestamps(true, true)
@@ -15,5 +14,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-    return knex.schema.dropTable('messages')
+    return knex.schema.dropTable('user_channels')
 };

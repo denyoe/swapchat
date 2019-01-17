@@ -8,12 +8,12 @@ let UserCtrl: UserController = new UserController('User')
 
 const router = express.Router()
 
+router.post('/', UserCtrl.create)
+
 const verifyToken = require('../middlewares/verifytoken')
 router.use(verifyToken)
 
 router.get('/', UserCtrl.all)
-
-router.post('/', UserCtrl.create)
 
 router.get('/:id', UserCtrl.get)   
 
@@ -24,5 +24,7 @@ router.patch('/:id', UserCtrl.update)
 router.delete('/:id', UserCtrl.remove)
 
 router.get('/:id/posts', UserCtrl.posts)
+
+router.get('/:id/channels', UserCtrl.channels)
 
 export default router
