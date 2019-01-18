@@ -3,6 +3,9 @@
 body {
   padding: 1px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logo {
@@ -11,4 +14,11 @@ body {
   /* background: rgba(255,255,255,.2);   */
   margin: 16px 28px 16px 0;
   float: left;
+}
+
+/* .LoginForm {} */
+
+.loginMsg {
+  text-align: center;
+  margin-bottom: 5vh;
 }

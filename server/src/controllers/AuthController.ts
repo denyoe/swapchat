@@ -5,9 +5,8 @@ import * as bcrypt from 'bcryptjs'
 import passport from 'passport'
 import { Request, Response } from 'express'
 import { Strategy, ExtractJwt } from 'passport-jwt'
-import { UserController } from '../controllers/UserController'
+// import { UserController } from '../controllers/UserController'
 const Bookshelf = require('../../bookshelf')
-const dotenv = require('dotenv').config()
 
 class Auth {
 

@@ -6,3 +6,17 @@ export const setToken = (data) => {
         data
     }
 }
+
+export const setLogin = (data) => {
+    return {
+        type: actionTypes.SET_LOGIN,
+        data
+    }
+}
+
+export const signout = (data) => {
+    return {
+        type: actionTypes.USER_LOGOUT,
+        data
+    }
+}

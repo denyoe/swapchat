@@ -1,8 +1,8 @@
 import axios from 'axios';
 import _ from 'lodash';
 import store from '../store';
-import { setToken } from '../actions'
-import { LOGIN } from '../config/Api';
+import { setToken, signout } from '../actions'
+import api from '../config/Api'
 
 export function InvalidCredentialsException(message) {
     this.message = message;
@@ -11,7 +11,7 @@ export function InvalidCredentialsException(message) {
 
 export function login(username, password) {
   return axios
-    .post(LOGIN, {
+    .post(api.base + api.auth, {
       username,
       password
     })
@@ -29,4 +29,12 @@ export function login(username, password) {
 
 export function loggedIn() {
   return store.getState().token !== null;
+}
+
+export function logout() {
+  store.dispatch(signout())
+}
+
+export function user() {
+  return store.getState().user
 }

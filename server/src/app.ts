@@ -12,7 +12,7 @@ const graphqlHTTP = require('express-graphql')
 import passport from 'passport'
 const dotenv = require('dotenv').config()
 const Auth = require('./controllers/AuthController').default
-const expressValidator = require('express-validator')
+import expressValidator from 'express-validator'
 
 const typeDefs = require('./schema')
 

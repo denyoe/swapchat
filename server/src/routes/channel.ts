@@ -30,4 +30,6 @@ router.get('/:id/posts', ChannelCtrl.posts)
 
 router.post('/:id/subscribe/:user_id', ChannelCtrl.subscribe)
 
+router.delete('/:id/subscribe/:user_id', ChannelCtrl.unsubscribe)
+
 export default router

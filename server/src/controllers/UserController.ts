@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { BaseController } from './BaseController'
 import * as bcrypt from 'bcryptjs'
+import bookshelf from 'bookshelf'
 
 export class UserController extends BaseController {
 
@@ -12,12 +13,8 @@ export class UserController extends BaseController {
             password: hash
         })
         .save()
-        .then((model: Object) => {
-            return res.status(201).json(model)
-        })
-        .catch((err: string) => {
-            return res.json(err)
-        })
+        .then((model: bookshelf.Model<any>) => res.status(201).json(model))
+        .catch((err: string) => res.json(err))
     }
 
     public posts = (req: Request, res: Response) => {
@@ -25,23 +22,14 @@ export class UserController extends BaseController {
 
         new this.Model({ id: id })
             .fetch({ withRelated: ['posts'] })
-            .then((model: Object) => {
-                return res.json(model)
-            })
-            .catch((err: string) => {
-                return res.json(err)
-            })
+            .then((model: bookshelf.Model<any>) => res.json(model))
+            .catch((err: string) => res.json(err))
     }
 
     public byUsername = (username: string) => {
         new this.Model({ username: username })
-            .then((model: any) => {
-                console.log('hey', model)
-                return model.toJSON()
-            })
-            .catch((err: string) => {
-                return new Error(err)
-            })
+            .then((model: bookshelf.Model<any>) => model.toJSON())
+            .catch((err: string) => new Error(err))
     }
 
     public channels = (req: Request, res: Response) => {
@@ -49,12 +37,8 @@ export class UserController extends BaseController {
 
         new this.Model({ id: id })
             .fetch({ withRelated: ['channels', 'owned_channels'] })
-            .then((model: Object) => {
-                return res.json(model)
-            })
-            .catch((err: string) => {
-                return res.json(err)
-            })
+            .then((model: bookshelf.Model<any>) => res.json(model))
+            .catch((err: string) => res.json(err))
     }
 
 }

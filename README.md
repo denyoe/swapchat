@@ -2,6 +2,8 @@
 
 ### Instructions
 
+---
+
 #### Server (NodeJS)
 1. Go to server directory: `cd server`
 2. Duplicate the `.env.example` file and rename it to `.env`
@@ -15,15 +17,17 @@ Server API URL: `http://localhost:4000/`
 
 You can Run the tests with: `npm test`
 
+***Sample API requests can be found in the root directory and imported: `Swapchat.postman_collection.json`***
+
 ---
 
 #### Client (ReactJS)
-1. Ensure the NodeJS server is running on port 4000
+1. Ensure the NodeJS server is running on port ***4000***
 2. Go to the client directory: `cd client`
 3. Install depencencies with: `npm install`
-4. Run the App qith: `npm start`
+4. Run the App with: `npm start`
 
-The application should now be accessible at `http://localhost:8080/`
+The application should now be accessible at `http://localhost:3000/`
 
 ---
 
