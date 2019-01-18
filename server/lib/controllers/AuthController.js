@@ -47,11 +47,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var jwt = __importStar(require("jwt-simple"));
 var moment_1 = __importDefault(require("moment"));
+var User_1 = require("../models/User");
 var bcrypt = __importStar(require("bcryptjs"));
 var passport_1 = __importDefault(require("passport"));
 var passport_jwt_1 = require("passport-jwt");
+// import { UserController } from '../controllers/UserController'
 var Bookshelf = require('../../bookshelf');
-var dotenv = require('dotenv').config();
 var Auth = /** @class */ (function () {
     function Auth() {
         var _this = this;
@@ -86,22 +87,27 @@ var Auth = /** @class */ (function () {
                         errors = req.validationErrors();
                         if (errors)
                             throw errors;
-                        return [4 /*yield*/, new (Bookshelf.model('User'))({ username: req.body.username }).fetch()];
+                        return [4 /*yield*/, new User_1.User({ username: req.body.username }).fetch()];
                     case 1:
                         user_1 = _a.sent();
-                        new (Bookshelf.model('User'))({ username: req.body.username })
-                            .fetch()
-                            .then(function (model) {
-                            if (!model) {
-                                res.status(401).json({ "message": "Invalid credentials", "errors": new Error("Invalid Password") });
-                            }
-                            bcrypt.compare(req.body.password, model.toJSON().password).then(function (success) {
-                                if (!success) {
-                                    res.status(401).json({ "message": "Invalid credentials", "errors": new Error("Invalid Password") });
+                        if (user_1) {
+                            new (Bookshelf.model('User'))({ username: req.body.username })
+                                .fetch()
+                                .then(function (model) {
+                                if (!model) {
+                                    res.status(401).json({ "message": "Invalid credentials", "errors": "Invalid Password" });
                                 }
-                                return res.status(200).json(_this.genToken(user_1.toJSON()));
+                                bcrypt.compare(req.body.password, model.toJSON().password).then(function (success) {
+                                    if (!success) {
+                                        res.status(401).json({ "message": "Invalid credentials", "errors": "Invalid Password" });
+                                    }
+                                    return res.status(200).json(_this.genToken(user_1.toJSON()));
+                                });
                             });
-                        });
+                        }
+                        else {
+                            return [2 /*return*/, res.status(401).json({ "message": "Invalid credentials", "errors": "User not found" })];
+                        }
                         return [3 /*break*/, 3];
                     case 2:
                         err_1 = _a.sent();
@@ -119,7 +125,7 @@ var Auth = /** @class */ (function () {
                 passReqToCallback: true
             };
             return new passport_jwt_1.Strategy(params, function (req, payload, done) {
-                new (Bookshelf.model('User'))({ username: payload.username })
+                new User_1.User({ username: payload.username })
                     .fetch()
                     .then(function (model) {
                     if (model.length == 0) {

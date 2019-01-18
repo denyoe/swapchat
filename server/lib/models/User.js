@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bookshelf = require('../../bookshelf');
-// const User = bookshelf.Model.extend({
-//     tableName: 'users',
-//     posts: function (): Object {
-//         return this.hasMany(Post)
-//     }
-// })
-module.exports = bookshelf.model('User', {
+exports.User = bookshelf.model('User', {
     tableName: 'users',
     posts: function () {
         return this.hasMany('Post');
+    },
+    channels: function () {
+        return this.belongsToMany('Channel', 'user_channels');
+    },
+    owned_channels: function () {
+        return this.hasMany('Channel');
     }
 });
 // module.exports = bookshelf.model('User', User)

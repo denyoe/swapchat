@@ -8,7 +8,7 @@ export const apiClient = function () {
         baseURL: api.base,
         headers: { 
             'Content-Type': 'application/json',
-            'Authorization': 'Token ' + token
+            'Authorization': 'Bearer ' + token
         }
     }
     return axios.create(params)

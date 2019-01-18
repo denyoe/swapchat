@@ -6,6 +6,73 @@
 	},
 	"item": [
 		{
+			"name": "Auth - Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"marcus\",\n\t\"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/user/",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"marcus\",\n\t\"password\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/login",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "All Users",
 			"request": {
 				"method": "GET",
@@ -71,40 +138,6 @@
 						"api",
 						"user",
 						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create User",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\": \"marcus\",\n\t\"password\": \"password\"\n}"
-				},
-				"url": {
-					"raw": "127.0.0.1:4000/api/user/",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"user",
-						""
 					]
 				}
 			},
@@ -266,39 +299,6 @@
 			"response": []
 		},
 		{
-			"name": "Auth",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\": \"marcus\",\n\t\"password\": \"password\"\n}"
-				},
-				"url": {
-					"raw": "127.0.0.1:4000/api/login",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Post to Channel",
 			"request": {
 				"method": "POST",
@@ -378,7 +378,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgyNzE5MzksInVzZXJuYW1lIjoibWFyY3VzIn0.BYcwWuEZv-fAbcUiDXAJupCkKVdCCtwHddfAzwKf9yE",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgzODE2MjQsInVzZXJuYW1lIjoibWFyY3VzIn0.nlNTt7IxAztbRM440iObOTcRK5U-XZtijb4Ke5CwNno",
 						"type": "text"
 					}
 				],
@@ -387,7 +387,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "127.0.0.1:4000/api/channel/25/posts",
+					"raw": "127.0.0.1:4000/api/channel/1/posts",
 					"host": [
 						"127",
 						"0",
@@ -398,7 +398,7 @@
 					"path": [
 						"api",
 						"channel",
-						"25",
+						"1",
 						"posts"
 					]
 				}
@@ -538,7 +538,7 @@
 					"raw": "{\n\t\"name\": \"General\"\n}"
 				},
 				"url": {
-					"raw": "127.0.0.1:4000/api/channel/1/subscribe/3",
+					"raw": "127.0.0.1:4000/api/channel/1/subscribe/4",
 					"host": [
 						"127",
 						"0",
@@ -551,7 +551,49 @@
 						"channel",
 						"1",
 						"subscribe",
-						"3"
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unsubscribe User",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgyMjk2NDEsInVzZXJuYW1lIjoibWFyY3VzIn0.l0eghZ-1fu1_gKvvidh3IDjwuktTAGBzusGFeCV4y60",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "127.0.0.1:4000/api/channel/1/subscribe/4",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"channel",
+						"1",
+						"subscribe",
+						"4"
 					]
 				}
 			},

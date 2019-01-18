@@ -8,7 +8,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jwt = __importStar(require("jsonwebtoken"));
-module.exports = function (req, res, next) {
+exports.parse = function (req) {
     var token;
     if (req.headers['authorization']) {
         token = req.headers['authorization'].split(' ')[1];
@@ -16,21 +16,6 @@ module.exports = function (req, res, next) {
     else {
         token = req.body.token || req.query.token || req.headers['x-access-token'];
     }
-    var secret = process.env.JWT_SECRET;
-    if (token) {
-        // verifies secret and checks exp
-        jwt.verify(token, secret, function (err, decoded) {
-            if (err) { // failed verification.
-                return res.json({ "error": true });
-            }
-            req.decoded = decoded;
-            next(); // no error, proceed
-        });
-    }
-    else {
-        // forbidden without token
-        return res.status(401).json({
-            "error": true
-        });
-    }
+    var decoded = jwt.decode(token);
+    return decoded;
 };

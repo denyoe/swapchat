@@ -4,9 +4,6 @@ import { setLogin } from '../../actions'
 import store from '../../store'
 
 import {
-    BrowserRouter as Router,
-    Route,
-    Link,
     Redirect,
     withRouter
 } from 'react-router-dom'
@@ -23,12 +20,8 @@ class LoginForm extends React.Component {
         this.state = {
             username: '',
             password: '',
-            // redirectToReferrer: false
+            // redirectToReferrer: false    
         }
-
-        // this.handleUsernameUpdate = this.handleUsernameUpdate.bind(this)
-        // this.handlePasswordUpdate = this.handlePasswordUpdate.bind(this)
-        // this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     handleSubmit = (e) => {
@@ -62,8 +55,6 @@ class LoginForm extends React.Component {
     render() {
         let { from } = this.props.location.state || { from: { pathname: "/chat" } }
         let redirectToReferrer = Auth.loggedIn()
-
-        console.log(redirectToReferrer, from)
 
         if (redirectToReferrer) return <Redirect to={from} />
 

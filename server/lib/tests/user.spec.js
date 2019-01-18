@@ -44,41 +44,85 @@ var config = require('../../knexfile.js');
 var request = require('supertest');
 var app_1 = __importDefault(require("../app"));
 var knex = k(config.staging);
+// const knex = k(config.testing)
 describe('User Resource', function () {
-    beforeAll(function () { return __awaiter(_this, void 0, void 0, function () {
+    // admin : password
+    var token;
+    beforeAll(function (done) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
+            knex('users')
+                .where('id', 999)
+                .then(function (rows) {
+                if (rows.length === 0) {
+                    return knex('users').insert([
+                        { id: 999, username: 'admin', password: '$2a$10$RGWd9twc/BQZArd9aSdpRelkIGq3EQhAlua2.DIMG.6iaRmtPBP4C' }
+                    ]);
+                }
+            });
+            request(app_1.default)
+                .post('/api/login')
+                .send({
+                username: 'admin', password: 'password'
+            })
+                .end(function (err, response) {
+                var tmp = response.body.token;
+                if (tmp) {
+                    token = tmp.split(' ')[1];
+                }
+                done();
+            });
             return [2 /*return*/];
         });
     }); });
     afterAll(function () { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0: 
+                // await knex.raw('TRUNCATE TABLE channels users')
+                return [4 /*yield*/, knex('users').where('id', 999).del()];
+                case 1:
+                    // await knex.raw('TRUNCATE TABLE channels users')
+                    _a.sent();
+                    return [2 /*return*/];
+            }
         });
     }); });
     describe('CRUD', function () {
-        it('return 404', function () {
+        it('It should require authorization', function (done) {
+            return request(app_1.default)
+                .get('/api/user/999')
+                .then(function (res) {
+                expect(res.statusCode).toBe(401);
+                done();
+            });
+        });
+        it('return 404', function (done) {
             return request(app_1.default).get('/undefined')
-                .expect(404)
                 .then(function (res) {
                 expect(res.statusCode).toBe(404);
+                done();
             });
         });
-        it('can CREATE new user', function () {
-            return request(app_1.default).post('/api/user')
-                .send({ 'username': 'marcek', 'password': 'markword' })
-                .expect(200)
-                .then(function (res) {
-                expect(res.type).toBe('application/json');
-                expect(res.statusCode).toBe(200);
-                expect(res.body.username).toBe('marcek');
-                expect(res.body.password).toBe('markword');
-                knex('users')
-                    .where('id', res.body.id)
-                    .del();
+        it('can CREATE new user', function () { return request(app_1.default).post('/api/user')
+            .set('Authorization', "Bearer " + token)
+            .send({ 'username': 'marcek', 'password': 'markword' })
+            .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        expect(res.type).toBe('application/json');
+                        expect(res.statusCode).toBe(201);
+                        expect(res.body.username).toBe('marcek');
+                        return [4 /*yield*/, knex('users').where('id', res.body.id).del()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
-        });
-        it('can GET a user', function () { return __awaiter(_this, void 0, void 0, function () {
+        }); }); });
+        it('can GET a user', function (done) { return __awaiter(_this, void 0, void 0, function () {
             var id;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, knex('users').insert([
@@ -87,20 +131,29 @@ describe('User Resource', function () {
                     case 1:
                         id = _a.sent();
                         return [2 /*return*/, request(app_1.default).get('/api/user/' + id)
+                                .set('Authorization', "Bearer " + token)
                                 .expect(200)
-                                .then(function (res) {
-                                expect(res.type).toBe('application/json');
-                                expect(res.statusCode).toBe(200);
-                                expect(res.body.username).toBe('koffi');
-                                knex('users')
-                                    .where('id', id)
-                                    .del();
-                            })];
+                                .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            expect(res.type).toBe('application/json');
+                                            expect(res.statusCode).toBe(200);
+                                            expect(res.body.username).toBe('koffi');
+                                            return [4 /*yield*/, knex('users').where('id', id).del()];
+                                        case 1:
+                                            _a.sent();
+                                            done();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
                 }
             });
         }); });
         it('can UPDATE a user', function (done) { return __awaiter(_this, void 0, void 0, function () {
             var user;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, knex('users').insert([
@@ -110,17 +163,24 @@ describe('User Resource', function () {
                         user = _a.sent();
                         request(app_1.default)
                             .put('/api/user/' + user)
+                            .set('Authorization', "Bearer " + token)
                             .send({ 'username': 'sammy' })
                             .expect(200)
-                            .then(function (res) {
-                            expect(res.type).toBe('application/json');
-                            expect(res.statusCode).toBe(200);
-                            expect(res.body.username).toBe('sammy');
-                            knex('users')
-                                .where('id', user)
-                                .del();
-                            done();
-                        });
+                            .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        expect(res.type).toBe('application/json');
+                                        expect(res.statusCode).toBe(200);
+                                        expect(res.body.username).toBe('sammy');
+                                        return [4 /*yield*/, knex('users').where('id', user).del()];
+                                    case 1:
+                                        _a.sent();
+                                        done();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
                         return [2 /*return*/];
                 }
             });
@@ -136,6 +196,7 @@ describe('User Resource', function () {
                         user = _a.sent();
                         return [2 /*return*/, request(app_1.default)
                                 .delete('/api/user/' + user)
+                                .set('Authorization', "Bearer " + token)
                                 .expect(200)
                                 .then(function (res) {
                                 expect(res.type).toBe('application/json');

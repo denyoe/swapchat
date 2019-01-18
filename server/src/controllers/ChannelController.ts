@@ -10,6 +10,13 @@ import bookshelf from 'bookshelf'
 
 export class ChannelController extends BaseController {
 
+    public all = (req: Request, res: Response) => {
+        this.Model
+            .fetchAll({ withRelated: ['owner'] })
+            .then((collection: bookshelf.Collection<any>) => res.json(collection))
+            .catch((err: string) => res.json(err))
+    }
+
     public posts = async (req: Request, res: Response) => {
         let id: number = req.params.id
 
@@ -18,7 +25,7 @@ export class ChannelController extends BaseController {
         let user: any = await new User({ username: username }).fetch()
 
         new this.Model({ id: id })
-            .fetch({ withRelated: ['posts', 'members', 'owner'] })
+            .fetch({ withRelated: ['posts.author', 'members', 'owner'] })
             .then((model: bookshelf.Model<any>) => {
                 let channel = model.toJSON()
                 if(

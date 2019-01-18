@@ -27,6 +27,8 @@ You can Run the tests with: `npm test`
 3. Install depencencies with: `npm install`
 4. Run the App with: `npm start`
 
+Notes: The API configuration details for the client are in: `/client/src/config/Api.js`
+
 The application should now be accessible at `http://localhost:3000/`
 
 ---

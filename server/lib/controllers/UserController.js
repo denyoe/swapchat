@@ -60,11 +60,6 @@ var bcrypt = __importStar(require("bcryptjs"));
 var UserController = /** @class */ (function (_super) {
     __extends(UserController, _super);
     function UserController() {
-        // public create()
-        // bcrypt.hash(this.password, 10, (err, hash) => {
-        //     this.password = hash;
-        //     next();
-        // });
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.create = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var hash;
@@ -78,9 +73,8 @@ var UserController = /** @class */ (function (_super) {
                             password: hash
                         })
                             .save()
-                            .then(function (model) {
-                            return res.status(201).json(model);
-                        });
+                            .then(function (model) { return res.status(201).json(model); })
+                            .catch(function (err) { return res.json(err); });
                         return [2 /*return*/];
                 }
             });
@@ -89,22 +83,20 @@ var UserController = /** @class */ (function (_super) {
             var id = req.params.id;
             new _this.Model({ id: id })
                 .fetch({ withRelated: ['posts'] })
-                .then(function (model) {
-                return res.json(model);
-            })
-                .catch(function (err) {
-                return res.json(new Error(err));
-            });
+                .then(function (model) { return res.json(model); })
+                .catch(function (err) { return res.json(err); });
         };
         _this.byUsername = function (username) {
             new _this.Model({ username: username })
-                .then(function (model) {
-                console.log('hey', model);
-                return model.toJSON();
-            })
-                .catch(function (err) {
-                return new Error(err);
-            });
+                .then(function (model) { return model.toJSON(); })
+                .catch(function (err) { return new Error(err); });
+        };
+        _this.channels = function (req, res) {
+            var id = req.params.id;
+            new _this.Model({ id: id })
+                .fetch({ withRelated: ['channels', 'owned_channels'] })
+                .then(function (model) { return res.json(model); })
+                .catch(function (err) { return res.json(err); });
         };
         return _this;
     }

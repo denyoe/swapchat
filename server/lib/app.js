@@ -14,7 +14,7 @@ var UserController_1 = require("./controllers/UserController");
 var graphqlHTTP = require('express-graphql');
 var dotenv = require('dotenv').config();
 var Auth = require('./controllers/AuthController').default;
-var expressValidator = require('express-validator');
+var express_validator_1 = __importDefault(require("express-validator"));
 var typeDefs = require('./schema');
 var App = /** @class */ (function () {
     function App() {
@@ -38,7 +38,7 @@ var App = /** @class */ (function () {
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false }));
         // this.app.use(cookieParser())
-        this.app.use(expressValidator());
+        this.app.use(express_validator_1.default());
         this.app.use(Auth.initialize());
         this.app.use('/grahql', graphqlHTTP({
             schema: this.schema,

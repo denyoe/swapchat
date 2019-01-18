@@ -6,9 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import store from './store'
-// import { setToken } from './actions'
 
-// store.dispatch(setToken('this is the token'))
 
 ReactDOM.render(
     <Provider store={store}>

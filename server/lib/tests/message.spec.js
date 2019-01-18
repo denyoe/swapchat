@@ -44,26 +44,44 @@ var config = require('../../knexfile.js');
 var request = require('supertest');
 var app_1 = __importDefault(require("../app"));
 var knex = k(config.staging);
+// const knex = k(config.testing)
 describe('Message Resource', function () {
-    beforeAll(function () { return __awaiter(_this, void 0, void 0, function () {
+    // admin : password
+    var token;
+    beforeAll(function (done) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, knex('messages').truncate()
-                    // await knex('channels').truncate()
-                ];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+            knex('users')
+                .where('id', 888)
+                .then(function (rows) {
+                if (rows.length === 0) {
+                    return knex('users').insert([
+                        { id: 888, username: 'admin', password: '$2a$10$RGWd9twc/BQZArd9aSdpRelkIGq3EQhAlua2.DIMG.6iaRmtPBP4C' }
+                    ]);
+                }
+            });
+            request(app_1.default)
+                .post('/api/login')
+                .send({
+                username: 'admin', password: 'password'
+            })
+                .end(function (err, response) {
+                var tmp = response.body.token;
+                if (tmp) {
+                    token = tmp.split(' ')[1];
+                }
+                done();
+            });
+            return [2 /*return*/];
         });
     }); });
     afterAll(function () { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, knex('messages').truncate()
-                    // await knex('channels').truncate()
-                ];
+                case 0: 
+                // await knex('messages').truncate()
+                return [4 /*yield*/, knex('users').where('id', 888).del()];
                 case 1:
+                    // await knex('messages').truncate()
                     _a.sent();
                     return [2 /*return*/];
             }
@@ -71,53 +89,85 @@ describe('Message Resource', function () {
     }); });
     describe('CRUD', function () {
         it('can CREATE new channel', function () {
-            return request(app_1.default).post('/api/channel')
+            return request(app_1.default)
+                .post('/api/channel')
+                .set('Authorization', "Bearer " + token)
                 .send({ 'name': 'Channel 1' })
-                .expect(200)
-                .then(function (res) {
-                expect(res.type).toBe('application/json');
-                expect(res.statusCode).toBe(200);
-                expect(res.body.name).toBe('Channel 1');
-            });
+                .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            expect(res.type).toBe('application/json');
+                            expect(res.statusCode).toBe(201);
+                            expect(res.body.name).toBe('Channel 1');
+                            return [4 /*yield*/, knex('channels').where('id', res.body.id).del()];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            }); });
         });
         it('can GET a channel', function () { return __awaiter(_this, void 0, void 0, function () {
             var id;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, knex('channels').insert([
-                            { name: 'Channel 33' }
+                            { name: 'Channel 33', user_id: 888 }
                         ])];
                     case 1:
                         id = _a.sent();
                         return [2 /*return*/, request(app_1.default).get('/api/channel/' + id)
+                                .set('Authorization', "Bearer " + token)
                                 .expect(200)
-                                .then(function (res) {
-                                expect(res.type).toBe('application/json');
-                                expect(res.statusCode).toBe(200);
-                                expect(res.body.name).toBe('Channel 33');
-                            })];
+                                .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            expect(res.type).toBe('application/json');
+                                            expect(res.statusCode).toBe(200);
+                                            expect(res.body.name).toBe('Channel 33');
+                                            return [4 /*yield*/, knex('channels').where('id', res.body.id).del()];
+                                        case 1:
+                                            _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
                 }
             });
         }); });
         it('can UPDATE a channel', function (done) { return __awaiter(_this, void 0, void 0, function () {
             var id;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, knex('channels').insert([
-                            { name: 'Channel 33' }
+                            { name: 'Post to', user_id: 888 }
                         ])];
                     case 1:
                         id = _a.sent();
                         request(app_1.default)
                             .put('/api/channel/' + id)
+                            .set('Authorization', "Bearer " + token)
                             .send({ 'name': 'Updated 33' })
                             .expect(200)
-                            .then(function (res) {
-                            expect(res.type).toBe('application/json');
-                            expect(res.statusCode).toBe(200);
-                            expect(res.body.name).toBe('Updated 33');
-                            done();
-                        });
+                            .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        expect(res.type).toBe('application/json');
+                                        expect(res.statusCode).toBe(200);
+                                        expect(res.body.name).toBe('Updated 33');
+                                        return [4 /*yield*/, knex('channels').where('id', res.body.id).del()];
+                                    case 1:
+                                        _a.sent();
+                                        done();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
                         return [2 /*return*/];
                 }
             });
@@ -127,12 +177,13 @@ describe('Message Resource', function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, knex('channels').insert([
-                            { name: 'Channel 33' }
+                            { name: 'Post to', user_id: 888 }
                         ])];
                     case 1:
                         id = _a.sent();
                         return [2 /*return*/, request(app_1.default)
                                 .delete('/api/channel/' + id)
+                                .set('Authorization', "Bearer " + token)
                                 .expect(200)
                                 .then(function (res) {
                                 expect(res.type).toBe('application/json');
@@ -142,28 +193,37 @@ describe('Message Resource', function () {
             });
         }); });
         it('can POST to a channel', function () { return __awaiter(_this, void 0, void 0, function () {
-            var id, user_id;
+            var id;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, knex('channels').insert([
-                            { name: 'Post to' }
+                            { name: 'Post to', user_id: 888 }
                         ])];
                     case 1:
                         id = _a.sent();
-                        return [4 /*yield*/, knex('users').insert([
-                                { username: 'koffi', password: 'pass' }
-                            ])];
-                    case 2:
-                        user_id = _a.sent();
                         return [2 /*return*/, request(app_1.default)
-                                .post('/api/channel/' + id + '/message')
-                                .send({ body: 'Posted to channel', user_id: user_id, channel_id: id })
-                                .expect(200)
-                                .then(function (res) {
-                                expect(res.type).toBe('application/json');
-                                expect(res.statusCode).toBe(200);
-                                expect(res.body.body).toBe('Posted to channel');
-                            })];
+                                .post('/api/channel/' + id)
+                                .set('Authorization', "Bearer " + token)
+                                .send({ body: 'Posted to channel' })
+                                .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            expect(res.type).toBe('application/json');
+                                            expect(res.statusCode).toBe(201);
+                                            expect(res.body.body).toBe('Posted to channel');
+                                            expect(res.body.user_id).toBe(888); // logged in user
+                                            return [4 /*yield*/, knex('messages').where('id', res.body.id).del()];
+                                        case 1:
+                                            _a.sent();
+                                            return [4 /*yield*/, knex('channels').where('id', id).del()];
+                                        case 2:
+                                            _a.sent();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
                 }
             });
         }); });
