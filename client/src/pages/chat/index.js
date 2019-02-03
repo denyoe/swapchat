@@ -53,7 +53,7 @@ export default class Chat extends React.Component {
 				})
 			})
 			.catch(err => {
-				if (err.response.status === 403) {
+				if (err.response && err.response.status === 403) {
 					message.error("Access Denied")
 					this.setState({
 						roomId: null,
