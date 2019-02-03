@@ -48,8 +48,7 @@ The application should now be accessible at `http://localhost:3000/`
     *   Send a message to a channel
 3.  Use a database (MongoDB/MySQL/PostgresQL/Cassandra or other)
 
-#### Bonus
-
+#### Extended
 
 1.  A ReactJS client. The client doesn’t need to implement every API feature but should be functional.
 2.  Extended user:
@@ -66,30 +65,3 @@ The application should now be accessible at `http://localhost:3000/`
     *   Url metadata enrichment 
     *   Message advanced search
 4.  Api unit testing
-
-
-#### Objectives
-
-*   Try to keep it simple
-*   All the included features should work as intended
-*   Use modern JavaScript
-*   Using a strict syntactical superset of JavaScript like TypeScript or Flow is appreciated
-*   Using GraphQL is very appreciated, see: https://graphql.org/graphql-js/, https://www.apollographql.com/docs/react/essentials/get-started.html
-
----
-
-#### Example Graph Queries
-
-```
-<!-- Query String -->
-query getSingleUser($id: Int!) {
-    user(id: $id) {
-        username,
-    		password
-    }
-}
-<!-- Query Variables -->
-{ 
-    "id":231
-}
-```
