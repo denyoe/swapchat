@@ -1,4 +1,4 @@
-## Chat API in Node JS
+## Chat SPA - Node <-> React
 
 <img src="screenshot.png" alt="App Screenshot">
 
