@@ -1,6 +1,6 @@
 ## Chat API in Node JS
 
-<img src="screenshot.png" alt="App Screenshot" width="500" height="500">
+<img src="screenshot.png" alt="App Screenshot">
 
 ### Instructions
 
